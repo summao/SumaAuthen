@@ -6,11 +6,16 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using SumaAuthen.Databases;
+using SumaAuthen.Repositories;
+using SumaAuthen.Services;
 
 namespace SumaAuthen
 {
@@ -26,8 +31,22 @@ namespace SumaAuthen
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddDbContext<MysqlDataContext>(options =>
+            {
+                options.UseMySql(
+                    Configuration.GetConnectionString("Mysql"),
+                    new MySqlServerVersion(new Version(8, 0, 21)),
+                     mySqlOptions => mySqlOptions.CharSetBehavior(CharSetBehavior.NeverAppend)
+                )
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors();
+            });
             services.AddControllers();
+
+            services.AddScoped<IAccountRepositories, AccountRepositories>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IJwtManager, JwtManager>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SumaAuthen", Version = "v1" });
