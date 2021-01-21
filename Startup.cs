@@ -46,6 +46,7 @@ namespace SumaAuthen
             services.AddScoped<IAccountRepositories, AccountRepositories>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IJwtManager, JwtManager>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddSwaggerGen(c =>
             {

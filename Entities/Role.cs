@@ -5,5 +5,5 @@ namespace SumaAuthen.Entities
         Admin,
         User
     }
-    
+
 }
