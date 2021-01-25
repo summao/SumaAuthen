@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using SumaAuthen.Databases;
+using SumaAuthen.Helpers;
 using SumaAuthen.Repositories;
 using SumaAuthen.Services;
 
@@ -48,6 +49,8 @@ namespace SumaAuthen
                 .EnableDetailedErrors();
             });
             services.AddControllers();
+
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             services.AddScoped<IAccountRepositories, AccountRepositories>();
             services.AddScoped<IAccountService, AccountService>();
