@@ -1,4 +1,4 @@
-namespace SumaAuthen.Helpers
+namespace Suma.Authen.Helpers
 {
     public class AppSettings
     {

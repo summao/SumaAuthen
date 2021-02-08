@@ -1,6 +1,6 @@
-using SumaAuthen.Entities;
+using Suma.Authen.Entities;
 
-namespace SumaAuthen.Models.Accounts
+namespace Suma.Authen.Models.Accounts
 {
     public class SignInResponse
     {

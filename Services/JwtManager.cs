@@ -4,10 +4,10 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using SumaAuthen.Entities;
-using SumaAuthen.Helpers;
+using Suma.Authen.Entities;
+using Suma.Authen.Helpers;
 
-namespace SumaAuthen.Services
+namespace Suma.Authen.Services
 {
     public interface IJwtManager
     {

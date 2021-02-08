@@ -7,12 +7,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
-using SumaAuthen.Databases;
-using SumaAuthen.Helpers;
-using SumaAuthen.Repositories;
-using SumaAuthen.Services;
+using Suma.Authen.Databases;
+using Suma.Authen.Helpers;
+using Suma.Authen.Repositories;
+using Suma.Authen.Services;
 
-namespace SumaAuthen
+namespace Suma.Authen
 {
     public class Startup
     {
@@ -59,7 +59,7 @@ namespace SumaAuthen
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SumaAuthen", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Suma.Authen", Version = "v1" });
             });
         }
 
@@ -70,7 +70,7 @@ namespace SumaAuthen
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SumaAuthen v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Suma.Authen v1"));
             }
 
             app.UseRouting();

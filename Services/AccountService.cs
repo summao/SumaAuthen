@@ -1,13 +1,13 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using SumaAuthen.Entities;
-using SumaAuthen.Models;
-using SumaAuthen.Models.Accounts;
-using SumaAuthen.Repositories;
+using Suma.Authen.Entities;
+using Suma.Authen.Models;
+using Suma.Authen.Models.Accounts;
+using Suma.Authen.Repositories;
 using BC = BCrypt.Net.BCrypt;
 
-namespace SumaAuthen.Services
+namespace Suma.Authen.Services
 {
     public interface IAccountService
     {

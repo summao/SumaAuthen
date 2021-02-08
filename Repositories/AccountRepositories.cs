@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using SumaAuthen.Databases;
-using SumaAuthen.Entities;
+using Suma.Authen.Databases;
+using Suma.Authen.Entities;
 
-namespace SumaAuthen.Repositories
+namespace Suma.Authen.Repositories
 {
     public interface IAccountRepositories
     {
@@ -12,7 +12,7 @@ namespace SumaAuthen.Repositories
     }
 
     public class AccountRepositories : IAccountRepositories
-    {   
+    {
         private readonly MysqlDataContext _context;
 
         public AccountRepositories(MysqlDataContext context)

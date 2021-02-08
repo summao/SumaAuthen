@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using SumaAuthen.Entities;
+using Suma.Authen.Entities;
 
-namespace SumaAuthen.Databases
+namespace Suma.Authen.Databases
 {
     public class MysqlDataContext : DbContext
     {

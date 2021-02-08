@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using SumaAuthen.Models;
-using SumaAuthen.Models.Accounts;
-using SumaAuthen.Services;
+using Suma.Authen.Models;
+using Suma.Authen.Models.Accounts;
+using Suma.Authen.Services;
 
-namespace SumaAuthen.Controllers
+namespace Suma.Authen.Controllers
 {
     public class AccountsController : ControllerBase
     {

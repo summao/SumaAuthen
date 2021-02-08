@@ -4,9 +4,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using SumaAuthen.Databases;
+using Suma.Authen.Databases;
 
-namespace SumaAuthen.Repositories
+namespace Suma.Authen.Repositories
 {
     public interface IRepository<TEntity> where TEntity : class
     {

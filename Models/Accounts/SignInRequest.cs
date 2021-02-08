@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace SumaAuthen.Models.Accounts
+namespace Suma.Authen.Models.Accounts
 {
     public class SignInRequest
     {

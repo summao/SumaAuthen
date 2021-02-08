@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace SumaAuthen.Entities
+namespace Suma.Authen.Entities
 {
     public class Account
     {

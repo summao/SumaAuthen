@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using SumaAuthen.Databases;
-using SumaAuthen.Entities;
+using Suma.Authen.Databases;
+using Suma.Authen.Entities;
 
-namespace SumaAuthen.Repositories
+namespace Suma.Authen.Repositories
 {
     public interface IUnitOfWork
     {

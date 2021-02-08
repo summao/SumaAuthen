@@ -1,4 +1,4 @@
-namespace SumaAuthen.Entities
+namespace Suma.Authen.Entities
 {
     public enum Role
     {

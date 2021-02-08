@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "SumaAuthen": {
+    "Suma.Authen": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
