@@ -1,6 +1,6 @@
 using Suma.Authen.Entities;
 
-namespace Suma.Authen.Models.Accounts
+namespace Suma.Authen.Dtos.Accounts
 {
     public class SignInResponse
     {

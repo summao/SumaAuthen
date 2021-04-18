@@ -2,8 +2,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Suma.Authen.Entities;
-using Suma.Authen.Models;
-using Suma.Authen.Models.Accounts;
+using Suma.Authen.Dtos;
+using Suma.Authen.Dtos.Accounts;
 using Suma.Authen.Repositories;
 using BC = BCrypt.Net.BCrypt;
 

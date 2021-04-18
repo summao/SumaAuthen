@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Suma.Authen.Models
+namespace Suma.Authen.Dtos.Accounts
 {
-    public class SignUpRequest
+    public class SignInRequest
     {
         [Required]
         [EmailAddress]
@@ -11,8 +11,6 @@ namespace Suma.Authen.Models
 
         [Required]
         [MaxLength(50)]
-        [MinLength(6)]
         public string Password { get; set; }
-
     }
 }

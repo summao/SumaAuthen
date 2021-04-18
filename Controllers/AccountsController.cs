@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Suma.Authen.Models;
-using Suma.Authen.Models.Accounts;
+using Suma.Authen.Dtos;
+using Suma.Authen.Dtos.Accounts;
 using Suma.Authen.Services;
 
 namespace Suma.Authen.Controllers
