@@ -49,16 +49,14 @@ namespace Suma.Authen.Services
 
         public async Task SignUpAsync(SignUpRequest reqModel)
         {
-            var isDuplicated = _unitOfWork.Accounts.GetAsync(a => a.Email == reqModel.Email).Any();
-            if (isDuplicated)
-            {
-                throw new ArgumentException("duplicated email");
-            }
-
+            var birthdate = new DateTime(reqModel.Year, reqModel.Month, reqModel.Day, 0, 0, 0);
             var account = new Account
             {
                 Email = reqModel.Email,
                 PasswordHash = BC.HashPassword(reqModel.Password),
+                ProfileName = reqModel.ProfileName,
+                Username = reqModel.Username,
+                Birthdate = birthdate,
                 Role = Role.User,
                 Created = DateTime.UtcNow,
             };

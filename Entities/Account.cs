@@ -8,16 +8,30 @@ namespace Suma.Authen.Entities
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(50)]
+        [EmailAddress]
+        [MaxLength(100)]
         public string Email { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [MaxLength(200)]
         public string PasswordHash { get; set; }
 
         [Required]
+        [MaxLength(100)]
+        public string ProfileName { get; set; }
+
+        [Required]
+        [MaxLength(30)]
+        public string Username { get; set; }
+
+        [Required]
+        public DateTime Birthdate { get; set; }
+
+        [Required]
         public Role Role { get; set; }
+
         public DateTime Created { get; set; }
+        
         public DateTime? Updated { get; set; }
     }
 }
