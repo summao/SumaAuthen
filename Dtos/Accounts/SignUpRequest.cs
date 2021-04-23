@@ -20,6 +20,7 @@ namespace Suma.Authen.Dtos
 
         [Required]
         [MaxLength(30)]
+        [RegularExpression(@"^[a-z][a-z_\d]*[a-z1-9]$")]
         public string Username { get; set; }
 
         [Required]
