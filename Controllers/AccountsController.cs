@@ -29,5 +29,17 @@ namespace Suma.Authen.Controllers
             await _accountService.SignUpAsync(reqModel);
             return Ok();
         }
+
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken(RefreshTokenRequest reqModel)
+        {
+            var res = await _accountService.RefreshToken(reqModel);
+            if (res is null)
+            {
+                return Unauthorized("invalid token.");
+            }
+
+            return Ok(res);
+        }
     }
 }

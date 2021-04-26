@@ -7,6 +7,7 @@ namespace Suma.Authen.Repositories
     public interface IUnitOfWork
     {
         IRepository<Account> Accounts { get; }
+        IRepository<RefreshToken> RefreshTokens { get; }
 
         Task CommitAsync();
     }
@@ -16,6 +17,7 @@ namespace Suma.Authen.Repositories
         private readonly MysqlDataContext _context;
 
         private BaseRepository<Account> _accounts;
+        private BaseRepository<RefreshToken> _refreshTokens;
 
         public UnitOfWork(MysqlDataContext context)
         {
@@ -23,6 +25,7 @@ namespace Suma.Authen.Repositories
         }
 
         public IRepository<Account> Accounts => _accounts ?? (_accounts = new BaseRepository<Account>(_context));
+        public IRepository<RefreshToken> RefreshTokens => _refreshTokens ?? (_refreshTokens = new BaseRepository<RefreshToken>(_context));
 
         public async Task CommitAsync()
         {

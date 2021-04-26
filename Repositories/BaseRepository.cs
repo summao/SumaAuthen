@@ -17,10 +17,11 @@ namespace Suma.Authen.Repositories
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = ""
         );
+        Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> filter);
         TEntity GetByIdAsync(object id);
         IEnumerable<TEntity> GetWithRawSqlAsync(string query, params object[] parameters);
         Task InsertAsync(TEntity entity);
-        void UpdateAsync(TEntity entityToUpdate);
+        void Update(TEntity entityToUpdate);
     }
 
     public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class
@@ -74,6 +75,11 @@ namespace Suma.Authen.Repositories
             }
         }
 
+        public virtual async Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> filter)
+        {
+            return await _dbSet.Where(filter).SingleOrDefaultAsync();
+        }
+
         public TEntity GetByIdAsync(object id)
         {
             throw new NotImplementedException();
@@ -89,9 +95,9 @@ namespace Suma.Authen.Repositories
             await _dbSet.AddAsync(entity);
         }
 
-        public void UpdateAsync(TEntity entityToUpdate)
+        public virtual void Update(TEntity entityToUpdate)
         {
-            throw new NotImplementedException();
+            _dbSet.Update(entityToUpdate);
         }
     }
 }

@@ -13,6 +13,7 @@ namespace Suma.Authen.Services
     {
         Task<SignInResponse> SignInAsync(SignInRequest req);
         Task SignUpAsync(SignUpRequest reqModel);
+        Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest reqModel);
     }
 
     public class AccountService : IAccountService
@@ -43,7 +44,7 @@ namespace Suma.Authen.Services
                 Id = account.Id,
                 Email = account.Email,
                 Role = account.Role,
-                JwtToken = jwtToken
+                AccessToken = jwtToken
             };
         }
 
@@ -63,6 +64,35 @@ namespace Suma.Authen.Services
 
             await _unitOfWork.Accounts.InsertAsync(account);
             await _unitOfWork.CommitAsync();
+        }
+
+        public async Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest reqModel)
+        {
+            var refreshToken = await _unitOfWork.RefreshTokens.GetOneAsync(a => a.Token == reqModel.RefreshToken && a.UserId == reqModel.UserId && a.Revoked == null);
+            if (refreshToken is null)
+            {
+                return null;
+            }
+            refreshToken.Revoked = DateTime.UtcNow;
+
+            var account = await _unitOfWork.Accounts.GetOneAsync(a => a.Id == reqModel.UserId);
+            var accessToken = _jwtManager.GenerateJwtToken(account);
+            var newRefreshToken = new RefreshToken 
+            {
+                Token = _jwtManager.RandomTokenString(),
+                UserId = account.Id,
+            }; 
+
+            await _unitOfWork.RefreshTokens.InsertAsync(newRefreshToken);    
+            _unitOfWork.RefreshTokens.Update(refreshToken);
+            await _unitOfWork.CommitAsync();
+
+            var res = new RefreshTokenResponse
+            {
+                AccessToken = accessToken,
+                RefreshToken = newRefreshToken.Token
+            };
+            return res;
         }
     }
 }
