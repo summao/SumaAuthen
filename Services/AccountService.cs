@@ -38,13 +38,22 @@ namespace Suma.Authen.Services
             }
 
             var jwtToken = _jwtManager.GenerateJwtToken(account);
+            var newRefreshToken = new RefreshToken 
+            {
+                Token = _jwtManager.RandomTokenString(),
+                UserId = account.Id,
+                Created = DateTime.UtcNow,
+            }; 
 
+            await _unitOfWork.RefreshTokens.InsertAsync(newRefreshToken);
+            await _unitOfWork.CommitAsync();
             return new SignInResponse
             {
                 Id = account.Id,
                 Email = account.Email,
                 Role = account.Role,
-                AccessToken = jwtToken
+                AccessToken = jwtToken,
+                RefreshToken = newRefreshToken.Token,
             };
         }
 
@@ -87,12 +96,11 @@ namespace Suma.Authen.Services
             _unitOfWork.RefreshTokens.Update(refreshToken);
             await _unitOfWork.CommitAsync();
 
-            var res = new RefreshTokenResponse
+             return new RefreshTokenResponse
             {
                 AccessToken = accessToken,
                 RefreshToken = newRefreshToken.Token
             };
-            return res;
         }
     }
 }

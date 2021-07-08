@@ -14,5 +14,7 @@ namespace Suma.Authen.Entities
         public int UserId { get; set; }
         
         public DateTime? Revoked { get; set; }
+
+        public DateTime Created { get; set; }
     }
 }
