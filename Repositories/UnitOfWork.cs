@@ -16,16 +16,16 @@ namespace Suma.Authen.Repositories
     {
         private readonly MysqlDataContext _context;
 
-        private BaseRepository<Account> _accounts;
-        private BaseRepository<RefreshToken> _refreshTokens;
+        private MySqlBaseRepository<Account> _accounts;
+        private MySqlBaseRepository<RefreshToken> _refreshTokens;
 
         public UnitOfWork(MysqlDataContext context)
         {
             _context = context;
         }
 
-        public IRepository<Account> Accounts => _accounts ?? (_accounts = new BaseRepository<Account>(_context));
-        public IRepository<RefreshToken> RefreshTokens => _refreshTokens ?? (_refreshTokens = new BaseRepository<RefreshToken>(_context));
+        public IRepository<Account> Accounts => _accounts ?? (_accounts = new MySqlBaseRepository<Account>(_context));
+        public IRepository<RefreshToken> RefreshTokens => _refreshTokens ?? (_refreshTokens = new MySqlBaseRepository<RefreshToken>(_context));
 
         public async Task CommitAsync()
         {

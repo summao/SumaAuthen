@@ -8,27 +8,11 @@ using Suma.Authen.Databases;
 
 namespace Suma.Authen.Repositories
 {
-    public interface IRepository<TEntity> where TEntity : class
-    {
-        void DeleteAsync(TEntity entityToDelete);
-        void DeleteAsync(object id);
-        IEnumerable<TEntity> GetAsync(
-            Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            string includeProperties = ""
-        );
-        Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> filter);
-        TEntity GetByIdAsync(object id);
-        IEnumerable<TEntity> GetWithRawSqlAsync(string query, params object[] parameters);
-        Task InsertAsync(TEntity entity);
-        void Update(TEntity entityToUpdate);
-    }
-
-    public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class MySqlBaseRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         private readonly MysqlDataContext _context;
         private readonly DbSet<TEntity> _dbSet;
-        public BaseRepository(MysqlDataContext context)
+        public MySqlBaseRepository(MysqlDataContext context)
         {
             _context = context;
             _dbSet = _context.Set<TEntity>();
