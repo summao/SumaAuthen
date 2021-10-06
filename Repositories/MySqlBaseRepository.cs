@@ -32,31 +32,32 @@ namespace Suma.Authen.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<TEntity> GetAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
+        public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
         {
-            IQueryable<TEntity> query = _dbSet;
+            // IQueryable<TEntity> query = _dbSet;
 
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
+            // if (filter != null)
+            // {
+            //     query = query.Where(filter);
+            // }
 
-            if (includeProperties != null)
-            {
-                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    query = query.Include(includeProperty);
-                }
-            }
+            // if (includeProperties != null)
+            // {
+            //     foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            //     {
+            //         query = query.Include(includeProperty);
+            //     }
+            // }
 
-            if (orderBy != null)
-            {
-                return orderBy(query).ToList();
-            }
-            else
-            {
-                return query.ToList();
-            }
+            // if (orderBy != null)
+            // {
+            //     return orderBy(query).ToList();
+            // }
+            // else
+            // {
+            //     return query.ToList();
+            // }
+            throw new NotImplementedException();
         }
 
         public virtual async Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> filter)
@@ -74,9 +75,10 @@ namespace Suma.Authen.Repositories
             throw new NotImplementedException();
         }
 
-        public virtual async Task InsertAsync(TEntity entity)
+        public virtual async Task<TEntity> InsertAsync(TEntity entity)
         {
             await _dbSet.AddAsync(entity);
+            return entity;
         }
 
         public virtual void Update(TEntity entityToUpdate)

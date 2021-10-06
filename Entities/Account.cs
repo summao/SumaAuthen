@@ -1,16 +1,19 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Suma.Authen.Entities
 {
     public class Account
     {
-        public int Id { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
 
         [Required]
-        [EmailAddress]
-        [MaxLength(100)]
-        public string Email { get; set; }
+        [MaxLength(20)]
+        public string MobileNumber { get; set; }
 
         [Required]
         [MaxLength(200)]
@@ -20,16 +23,12 @@ namespace Suma.Authen.Entities
         [MaxLength(100)]
         public string ProfileName { get; set; }
 
-        [Required]
-        [MaxLength(30)]
-        public string Username { get; set; }
-
-        [Required]
         public DateTime Birthdate { get; set; }
 
         [Required]
         public Role Role { get; set; }
-
+        
+        [Required]
         public DateTime Created { get; set; }
         
         public DateTime? Updated { get; set; }
