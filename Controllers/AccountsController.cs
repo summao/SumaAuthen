@@ -43,7 +43,7 @@ namespace Suma.Authen.Controllers
             return Ok(res);
         }
 
-        [Authorize(AuthenticationSchemes = "Asymmetric")]
+        [Authorize]
         [HttpGet("test")]
         public string Test()
         {

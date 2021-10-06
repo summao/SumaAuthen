@@ -67,7 +67,11 @@ namespace Suma.Authen
                 return new RsaSecurityKey(rsa);
             });
 
-            services.AddAuthentication()
+            services.AddAuthentication(a => 
+            {
+                a.DefaultAuthenticateScheme = "Asymmetric";
+                a.DefaultChallengeScheme = "Asymmetric";
+            })
             .AddJwtBearer("Asymmetric", options =>
             {
                 SecurityKey rsa = services.BuildServiceProvider().GetRequiredService<RsaSecurityKey>();
