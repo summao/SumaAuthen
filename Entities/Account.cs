@@ -23,7 +23,7 @@ namespace Suma.Authen.Entities
         [MaxLength(100)]
         public string ProfileName { get; set; }
 
-        public DateTime Birthdate { get; set; }
+        public DateTime? Birthdate { get; set; }
 
         [Required]
         public Role Role { get; set; }
