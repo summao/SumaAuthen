@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Suma.Authen.Repositories
+namespace Suma.Authen.Repositories.Base
 {
     public interface IRepository<TEntity> where TEntity : class
     {

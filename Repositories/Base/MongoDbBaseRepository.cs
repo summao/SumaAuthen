@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using MongoDB.Driver;
 
-namespace Suma.Authen.Repositories
+namespace Suma.Authen.Repositories.Base
 {
     public class MongoDbBaseRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {

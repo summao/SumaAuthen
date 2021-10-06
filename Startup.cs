@@ -39,16 +39,7 @@ namespace Suma.Authen
                     }
                 );
             });
-            services.AddDbContext<MysqlDataContext>(options =>
-            {
-                options.UseMySql(
-                    Configuration.GetConnectionString("Mysql"),
-                    new MySqlServerVersion(new Version(8, 0, 21)),
-                     mySqlOptions => mySqlOptions.CharSetBehavior(CharSetBehavior.NeverAppend)
-                )
-                .EnableSensitiveDataLogging()
-                .EnableDetailedErrors();
-            });
+
             services.AddControllers();
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
@@ -59,11 +50,11 @@ namespace Suma.Authen
                 return client.GetDatabase(mongoDbSettings.GetValue<string>("DatabaseName"));
             });
 
-            services.AddScoped<IAccountRepositories, AccountRepositories>();
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IJwtManager, JwtManager>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+
+            services.AddScoped<IAccountService, AccountService>();
+            
+            services.AddScoped<IJwtManager, JwtManager>();
 
             services.AddSwaggerGen(c =>
             {
