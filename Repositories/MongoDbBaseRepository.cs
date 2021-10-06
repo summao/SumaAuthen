@@ -7,12 +7,9 @@ namespace Suma.Authen.Repositories
     {
         private readonly IMongoCollection<TEntity> _collection;
 
-        public MongoDbBaseRepository()
+        public MongoDbBaseRepository(IMongoDatabase database)
         {
-            var client = new MongoClient("mongodb://localhost:2277");
-            var database = client.GetDatabase("authen");
-
-            _collection = database.GetCollection<TEntity>("Account");
+            _collection = database.GetCollection<TEntity>(typeof(TEntity).Name);
         }
 
         public async Task<System.Collections.Generic.IEnumerable<TEntity>> GetAsync(System.Linq.Expressions.Expression<System.Func<TEntity, bool>> filter = null, System.Func<System.Linq.IQueryable<TEntity>, System.Linq.IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
@@ -25,9 +22,9 @@ namespace Suma.Authen.Repositories
             throw new System.NotImplementedException();
         }
 
-        public Task<TEntity> GetOneAsync(System.Linq.Expressions.Expression<System.Func<TEntity, bool>> filter)
+        public async Task<TEntity> GetOneAsync(System.Linq.Expressions.Expression<System.Func<TEntity, bool>> filter)
         {
-            throw new System.NotImplementedException();
+            return await _collection.Find(filter).SingleAsync();
         }
 
         public System.Collections.Generic.IEnumerable<TEntity> GetWithRawSqlAsync(string query, params object[] parameters)

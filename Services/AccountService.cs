@@ -18,15 +18,27 @@ namespace Suma.Authen.Services
 
     public class AccountService : IAccountService
     {
-        private readonly IAccountRepositories _accountRepositories;
+        private readonly IAccountRepository _accountRepository;
         private readonly IJwtManager _jwtManager;
-        private readonly IUnitOfWork _unitOfWork;
 
-        public AccountService(IAccountRepositories accountRepositories, IJwtManager jwtManager, IUnitOfWork unitOfWork)
+        public AccountService(IAccountRepository accountRepository, IJwtManager jwtManager)
         {
-            _accountRepositories = accountRepositories;
+            _accountRepository = accountRepository;
             _jwtManager = jwtManager;
-            _unitOfWork = unitOfWork;
+        }
+
+        public async Task SignUpAsync(SignUpRequest reqModel)
+        {
+            var account = new Account
+            {
+                MobileNumber = reqModel.MobileNumber,
+                PasswordHash = BC.HashPassword(reqModel.Password),
+                ProfileName = reqModel.ProfileName,
+                Role = Role.User,
+                Created = DateTime.UtcNow,
+            };
+
+            await _accountRepository.InsertAsync(account);
         }
 
         public async Task<SignInResponse> SignInAsync(SignInRequest req)
@@ -56,24 +68,6 @@ namespace Suma.Authen.Services
             //     RefreshToken = newRefreshToken.Token,
             // };
             throw new NotImplementedException();
-        }
-
-        public async Task SignUpAsync(SignUpRequest reqModel)
-        {
-            var birthdate = new DateTime(reqModel.Year, reqModel.Month, reqModel.Day, 0, 0, 0);
-            var account = new Account
-            {
-                Email = reqModel.Email,
-                PasswordHash = BC.HashPassword(reqModel.Password),
-                ProfileName = reqModel.ProfileName,
-                Username = reqModel.Username,
-                Birthdate = birthdate,
-                Role = Role.User,
-                Created = DateTime.UtcNow,
-            };
-
-            await _unitOfWork.Accounts.InsertAsync(account);
-            await _unitOfWork.CommitAsync();
         }
 
         public async Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest reqModel)

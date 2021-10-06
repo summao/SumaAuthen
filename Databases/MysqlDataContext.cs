@@ -12,10 +12,6 @@ namespace Suma.Authen.Databases
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Account>()
-                .HasIndex(a => a.Email)
-                .IsUnique();
-
             modelBuilder.Entity<RefreshToken>()
                 .HasIndex(a => a.Token)
                 .IsUnique();

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Suma.Authen.Databases;
 using Suma.Authen.Helpers;
@@ -51,6 +52,12 @@ namespace Suma.Authen
             services.AddControllers();
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
+            services.AddSingleton<IMongoDatabase>(_ => {
+                var mongoDbSettings = Configuration.GetSection("MongoDbSettings");
+                var client = new MongoClient(mongoDbSettings.GetValue<string>("ConnectionString"));
+                return client.GetDatabase(mongoDbSettings.GetValue<string>("DatabaseName"));
+            });
 
             services.AddScoped<IAccountRepositories, AccountRepositories>();
             services.AddScoped<IAccountService, AccountService>();
