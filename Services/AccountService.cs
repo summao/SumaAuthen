@@ -43,6 +43,9 @@ namespace Suma.Authen.Services
 
         public async Task<SignInResponse> SignInAsync(SignInRequest req)
         {
+            return new SignInResponse{
+                AccessToken = _jwtManager.GenerateJwtToken(new Account{ Id = "maoxxx"})
+            };
             // var account = await _accountRepositories.GetByEmailAsync(req.Email);
             // if (account == null)
             // {
@@ -67,7 +70,7 @@ namespace Suma.Authen.Services
             //     AccessToken = jwtToken,
             //     RefreshToken = newRefreshToken.Token,
             // };
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         public async Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest reqModel)

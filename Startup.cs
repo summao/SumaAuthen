@@ -1,14 +1,13 @@
 using System;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
-using Suma.Authen.Databases;
 using Suma.Authen.Helpers;
 using Suma.Authen.Repositories;
 using Suma.Authen.Services;
@@ -44,21 +43,83 @@ namespace Suma.Authen
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
-            services.AddSingleton<IMongoDatabase>(_ => {
+            services.AddSingleton<IMongoDatabase>(_ =>
+            {
                 var mongoDbSettings = Configuration.GetSection("MongoDbSettings");
                 var client = new MongoClient(mongoDbSettings.GetValue<string>("ConnectionString"));
                 return client.GetDatabase(mongoDbSettings.GetValue<string>("DatabaseName"));
             });
 
+            var appSettings = new AppSettings();
+            Configuration.Bind(nameof(AppSettings), appSettings);
+            services.AddSingleton<RsaSecurityKey>(provider =>
+            {
+                // It's required to register the RSA key with depedency injection.
+                // If you don't do this, the RSA instance will be prematurely disposed.
+                RSA rsa = RSA.Create();
+                rsa.ImportRSAPublicKey(
+                    source: Convert.FromBase64String(
+                       appSettings.RsaPublicKey
+                    ),
+                    bytesRead: out int _
+                );
+
+                return new RsaSecurityKey(rsa);
+            });
+
+            services.AddAuthentication()
+            .AddJwtBearer("Asymmetric", options =>
+            {
+                SecurityKey rsa = services.BuildServiceProvider().GetRequiredService<RsaSecurityKey>();
+
+                options.IncludeErrorDetails = true; // <- great for debugging
+
+                // Configure the actual Bearer validation
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    IssuerSigningKey = rsa,
+                    ValidAudience = "jwt-test",
+                    ValidIssuer = "jwt-test",
+                    RequireSignedTokens = true,
+                    RequireExpirationTime = true, // <- JWTs are required to have "exp" property set
+                    ValidateLifetime = true, // <- the "exp" will be validated
+                    ValidateAudience = true,
+                    ValidateIssuer = true,
+                };
+            });
+
+
             services.AddScoped<IAccountRepository, AccountRepository>();
 
             services.AddScoped<IAccountService, AccountService>();
-            
+
             services.AddScoped<IJwtManager, JwtManager>();
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Suma.Authen", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
         }
 
@@ -75,6 +136,8 @@ namespace Suma.Authen
             app.UseRouting();
 
             app.UseCors(_allowOnlyWeb);
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

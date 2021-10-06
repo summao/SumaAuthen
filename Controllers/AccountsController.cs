@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Suma.Authen.Dtos;
 using Suma.Authen.Dtos.Accounts;
@@ -40,6 +41,13 @@ namespace Suma.Authen.Controllers
             }
 
             return Ok(res);
+        }
+
+        [Authorize(AuthenticationSchemes = "Asymmetric")]
+        [HttpGet("test")]
+        public string Test()
+        {
+            return "Test";
         }
     }
 }
