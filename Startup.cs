@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
+using Suma.Authen.Entities;
 using Suma.Authen.Helpers;
 using Suma.Authen.Repositories;
 using Suma.Authen.Services;
@@ -47,7 +48,16 @@ namespace Suma.Authen
             {
                 var mongoDbSettings = Configuration.GetSection("MongoDbSettings");
                 var client = new MongoClient(mongoDbSettings.GetValue<string>("ConnectionString"));
-                return client.GetDatabase(mongoDbSettings.GetValue<string>("DatabaseName"));
+                var database = client.GetDatabase(mongoDbSettings.GetValue<string>("DatabaseName"));
+                var refreshTokenCollection = database.GetCollection<RefreshToken>(nameof(RefreshToken));
+                refreshTokenCollection.Indexes.CreateOneAsync(
+                    new CreateIndexModel<RefreshToken>(
+                        new IndexKeysDefinitionBuilder<RefreshToken>()
+                        .Ascending(new StringFieldDefinition<RefreshToken>(nameof(RefreshToken.Token))
+                    ),
+                    new CreateIndexOptions { Unique = true, })
+                ).Wait();
+                return database;
             });
 
             var appSettings = new AppSettings();
@@ -67,7 +77,7 @@ namespace Suma.Authen
                 return new RsaSecurityKey(rsa);
             });
 
-            services.AddAuthentication(a => 
+            services.AddAuthentication(a =>
             {
                 a.DefaultAuthenticateScheme = "Asymmetric";
                 a.DefaultChallengeScheme = "Asymmetric";
@@ -94,8 +104,10 @@ namespace Suma.Authen
 
 
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
             services.AddScoped<IJwtManager, JwtManager>();
 
