@@ -1,26 +1,19 @@
-using System.Threading.Tasks;
-using Suma.Authen.Databases;
+using MongoDB.Driver;
 using Suma.Authen.Entities;
+using Suma.Authen.Repositories.Base;
 
 namespace Suma.Authen.Repositories
 {
-    public interface ITokenRepository
+    public interface IRefreshTokenRepository : IRepository<RefreshToken>
     {
-        
+
     }
 
-    public class TokenRepository : ITokenRepository
+    public class RefreshTokenRepository : MongoDbBaseRepository<RefreshToken>, IRefreshTokenRepository
     {
-        private readonly MysqlDataContext _context;
-
-        public TokenRepository(MysqlDataContext context)
+        public RefreshTokenRepository(IMongoDatabase database) : base(database) 
         {
-            _context = context;
+
         }
-
-        public async Task InsertAsync(RefreshToken token)
-        {
-            await _context.RefreshTokens.AddAsync(token);
-        } 
     }
 }
