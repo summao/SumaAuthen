@@ -8,7 +8,7 @@ namespace Suma.Authen.Entities
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [BsonRequired]
         public string Token { get; set; }
