@@ -1,20 +1,22 @@
 using System;
-using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Suma.Authen.Entities
 {
     public class RefreshToken
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
         public int Id { get; set; }
 
-        [Required]
+        [BsonRequired]
         public string Token { get; set; }
 
-        [Required]
+        [BsonRequired]
         public int UserId { get; set; }
-        
-        public DateTime? Revoked { get; set; }
 
-        public DateTime Created { get; set; }
+        [BsonRequired]
+        public DateTime Expired { get; set; }
     }
 }
