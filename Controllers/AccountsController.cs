@@ -8,6 +8,7 @@ using Suma.Authen.Services;
 namespace Suma.Authen.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     public class AccountsController : ControllerBase
     {
         private readonly IAccountService _accountService;
