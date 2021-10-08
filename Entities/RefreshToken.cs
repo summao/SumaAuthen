@@ -14,7 +14,7 @@ namespace Suma.Authen.Entities
         public string Token { get; set; }
 
         [BsonRequired]
-        public int UserId { get; set; }
+        public string AccountId { get; set; }
 
         [BsonRequired]
         public DateTime Expired { get; set; }
