@@ -2,7 +2,6 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Suma.Authen.Entities;
@@ -13,7 +12,6 @@ namespace Suma.Authen.Services
     public interface IJwtManager
     {
         string GenerateJwtToken(Account account);
-        string RandomTokenString();
     }
 
     public class JwtManager : IJwtManager
@@ -45,15 +43,6 @@ namespace Suma.Authen.Services
            );
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
-        }
-
-        public string RandomTokenString()
-        {
-            using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
-            var randomBytes = new byte[40];
-            rngCryptoServiceProvider.GetBytes(randomBytes);
-            // convert random bytes to hex string
-            return BitConverter.ToString(randomBytes).Replace("-", "");
         }
     }
 }
