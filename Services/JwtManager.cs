@@ -11,7 +11,7 @@ namespace Suma.Authen.Services
 {
     public interface IJwtManager
     {
-        string GenerateJwtToken(Account account);
+        string GenerateAccessToken(Account account);
     }
 
     public class JwtManager : IJwtManager
@@ -23,7 +23,7 @@ namespace Suma.Authen.Services
             _appSettings = appSettings.Value;
         }
 
-        public string GenerateJwtToken(Account account)
+        public string GenerateAccessToken(Account account)
         {
             using var rsa = RSA.Create();
             rsa.ImportRSAPrivateKey(

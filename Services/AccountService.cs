@@ -19,11 +19,16 @@ namespace Suma.Authen.Services
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository _accountRepository;
+        private readonly IRefreshTokenService _refreshTokenService;
         private readonly IJwtManager _jwtManager;
 
-        public AccountService(IAccountRepository accountRepository, IJwtManager jwtManager)
+        public AccountService(
+            IAccountRepository accountRepository,
+            IRefreshTokenService refreshTokenService,
+            IJwtManager jwtManager)
         {
             _accountRepository = accountRepository;
+            _refreshTokenService = refreshTokenService;
             _jwtManager = jwtManager;
         }
 
@@ -41,36 +46,24 @@ namespace Suma.Authen.Services
             await _accountRepository.InsertAsync(account);
         }
 
-        public async Task<SignInResponse> SignInAsync(SignInRequest req)
+        public async Task<SignInResponse> SignInAsync(SignInRequest reqModel)
         {
-            return new SignInResponse{
-                AccessToken = _jwtManager.GenerateJwtToken(new Account{ Id = "maoxxx"})
+            var account = await _accountRepository.GetOneAsync(x =>
+                x.MobileNumber == reqModel.MobileNumber
+                && x.PasswordHash == BC.HashPassword(reqModel.Password)
+            );
+            if (account == null)
+            {
+                throw new Exception("Email or password is incorrect");
+            }
+
+            return new SignInResponse
+            {
+                Id = account.Id,
+                Role = account.Role,
+                AccessToken = _jwtManager.GenerateAccessToken(account),
+                RefreshToken = (await _refreshTokenService.Create(account.Id)).Token,
             };
-            // var account = await _accountRepositories.GetByEmailAsync(req.Email);
-            // if (account == null)
-            // {
-            //     throw new Exception("Email or password is incorrect");
-            // }
-
-            // var jwtToken = _jwtManager.GenerateJwtToken(account);
-            // var newRefreshToken = new RefreshToken 
-            // {
-            //     Token = _jwtManager.RandomTokenString(),
-            //     UserId = account.Id,
-            //     Created = DateTime.UtcNow,
-            // }; 
-
-            // await _unitOfWork.RefreshTokens.InsertAsync(newRefreshToken);
-            // await _unitOfWork.CommitAsync();
-            // return new SignInResponse
-            // {
-            //     Id = account.Id,
-            //     Email = account.Email,
-            //     Role = account.Role,
-            //     AccessToken = jwtToken,
-            //     RefreshToken = newRefreshToken.Token,
-            // };
-            // throw new NotImplementedException();
         }
 
         public async Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest reqModel)

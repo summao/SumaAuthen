@@ -24,7 +24,7 @@ namespace Suma.Authen.Repositories.Base
 
         public async Task<TEntity> GetOneAsync(System.Linq.Expressions.Expression<System.Func<TEntity, bool>> filter)
         {
-            return await _collection.Find(filter).SingleAsync();
+            return await _collection.Find(filter).SingleOrDefaultAsync();
         }
 
         public System.Collections.Generic.IEnumerable<TEntity> GetWithRawSqlAsync(string query, params object[] parameters)

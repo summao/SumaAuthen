@@ -21,8 +21,7 @@ namespace Suma.Authen.Controllers
         [HttpPost("signin")]
         public async Task<IActionResult> Signin([FromBody] SignInRequest reqModel)
         {
-            var res = await _accountService.SignInAsync(reqModel);
-            return Ok(res);
+            return Ok(await _accountService.SignInAsync(reqModel));
         }
 
         [HttpPost("signup")]
