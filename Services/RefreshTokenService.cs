@@ -8,7 +8,7 @@ namespace Suma.Authen.Services
 {
     public interface IRefreshTokenService
     {
-        
+        Task<RefreshToken> Create(string accountId);
     }
 
     public class RefreshTokenService : IRefreshTokenService
