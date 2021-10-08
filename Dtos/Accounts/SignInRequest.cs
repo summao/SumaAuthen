@@ -5,9 +5,8 @@ namespace Suma.Authen.Dtos.Accounts
     public class SignInRequest
     {
         [Required]
-        [EmailAddress]
-        [MaxLength(50)]
-        public string Email { get; set; }
+        [MaxLength(20)]
+        public string MobileNumber { get; set; }
 
         [Required]
         [MaxLength(50)]
