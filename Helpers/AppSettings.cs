@@ -5,5 +5,6 @@ namespace Suma.Authen.Helpers
         public string Secret { get; set; }
         public string RsaPrivateKey { get; set; }
         public string RsaPublicKey { get; set; }
+        public int RefreshTokenExpiredDays { get; set; }
     }
 }
