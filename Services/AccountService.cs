@@ -1,11 +1,11 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Suma.Authen.Entities;
 using Suma.Authen.Dtos;
 using Suma.Authen.Dtos.Accounts;
 using Suma.Authen.Repositories;
 using BC = BCrypt.Net.BCrypt;
+using Suma.Authen.Exceptions;
 
 namespace Suma.Authen.Services
 {
@@ -54,7 +54,7 @@ namespace Suma.Authen.Services
             );
             if (account == null)
             {
-                throw new Exception("Email or password is incorrect");
+                throw new SignInException("Email or password is incorrect");
             }
 
             return new SignInResponse

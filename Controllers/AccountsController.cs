@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Suma.Authen.Dtos;
 using Suma.Authen.Dtos.Accounts;
+using Suma.Authen.Exceptions;
 using Suma.Authen.Services;
 
 namespace Suma.Authen.Controllers
@@ -21,7 +22,14 @@ namespace Suma.Authen.Controllers
         [HttpPost("signin")]
         public async Task<IActionResult> Signin([FromBody] SignInRequest reqModel)
         {
-            return Ok(await _accountService.SignInAsync(reqModel));
+            try
+            {
+                return Ok(await _accountService.SignInAsync(reqModel));
+            }
+            catch (SignInException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("signup")]
