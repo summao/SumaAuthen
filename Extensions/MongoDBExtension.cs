@@ -1,0 +1,28 @@
+using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
+using Suma.Authen.Entities;
+using Suma.Authen.Helpers;
+
+namespace Suma.Authen.Extensions
+{
+    public static class MongoDBExtension
+    {
+        public static void AddMongoDb(this IServiceCollection services, MongoDbSettings settings)
+        {
+             services.AddSingleton<IMongoDatabase>(_ =>
+            {
+                var client = new MongoClient(settings.ConnectionString);
+                var database = client.GetDatabase(settings.DatabaseName);
+                var refreshTokenCollection = database.GetCollection<RefreshToken>(nameof(RefreshToken));
+                refreshTokenCollection.Indexes.CreateOneAsync(
+                    new CreateIndexModel<RefreshToken>(
+                        new IndexKeysDefinitionBuilder<RefreshToken>()
+                        .Ascending(new StringFieldDefinition<RefreshToken>(nameof(RefreshToken.Token))
+                    ),
+                    new CreateIndexOptions { Unique = true, })
+                ).Wait();
+                return database;
+            });
+        } 
+    }
+}

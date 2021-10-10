@@ -7,8 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using MongoDB.Driver;
-using Suma.Authen.Entities;
+using Suma.Authen.Extensions;
 using Suma.Authen.Helpers;
 using Suma.Authen.Repositories;
 using Suma.Authen.Services;
@@ -44,21 +43,9 @@ namespace Suma.Authen
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
-            services.AddSingleton<IMongoDatabase>(_ =>
-            {
-                var mongoDbSettings = Configuration.GetSection("MongoDbSettings");
-                var client = new MongoClient(mongoDbSettings.GetValue<string>("ConnectionString"));
-                var database = client.GetDatabase(mongoDbSettings.GetValue<string>("DatabaseName"));
-                var refreshTokenCollection = database.GetCollection<RefreshToken>(nameof(RefreshToken));
-                refreshTokenCollection.Indexes.CreateOneAsync(
-                    new CreateIndexModel<RefreshToken>(
-                        new IndexKeysDefinitionBuilder<RefreshToken>()
-                        .Ascending(new StringFieldDefinition<RefreshToken>(nameof(RefreshToken.Token))
-                    ),
-                    new CreateIndexOptions { Unique = true, })
-                ).Wait();
-                return database;
-            });
+            var mongoDbSettings = new MongoDbSettings();
+            Configuration.Bind(nameof(MongoDbSettings), mongoDbSettings);
+            services.AddMongoDb(mongoDbSettings);
 
             var appSettings = new AppSettings();
             Configuration.Bind(nameof(AppSettings), appSettings);
