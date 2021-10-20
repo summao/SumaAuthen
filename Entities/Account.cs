@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -26,6 +27,8 @@ namespace Suma.Authen.Entities
         public DateTime? Birthdate { get; set; }
 
         [Required]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        [BsonRepresentation(BsonType.String)]
         public Role Role { get; set; }
         
         [Required]

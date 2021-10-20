@@ -6,6 +6,7 @@ using Suma.Authen.Dtos.Accounts;
 using Suma.Authen.Repositories;
 using BC = BCrypt.Net.BCrypt;
 using Suma.Authen.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Suma.Authen.Services
 {
@@ -48,7 +49,7 @@ namespace Suma.Authen.Services
 
         public async Task<SignInResponse> SignInAsync(SignInRequest reqModel)
         {
-            var account = await _accountRepository.GetOneAsync(x =>
+            var account = await _accountRepository.Collection.FirstOrDefaultAsync(x =>
                 x.MobileNumber == reqModel.MobileNumber
                 && x.PasswordHash == BC.HashPassword(reqModel.Password)
             );

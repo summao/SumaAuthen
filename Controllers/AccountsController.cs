@@ -19,6 +19,13 @@ namespace Suma.Authen.Controllers
             _accountService = accountService;
         }
 
+        [HttpPost("signup")]
+        public async Task<IActionResult> SignUp([FromBody] SignUpRequest reqModel)
+        {
+            await _accountService.SignUpAsync(reqModel);
+            return Ok();
+        }
+        
         [HttpPost("signin")]
         public async Task<IActionResult> Signin([FromBody] SignInRequest reqModel)
         {
@@ -32,12 +39,6 @@ namespace Suma.Authen.Controllers
             }
         }
 
-        [HttpPost("signup")]
-        public async Task<IActionResult> SignUp([FromBody] SignUpRequest reqModel)
-        {
-            await _accountService.SignUpAsync(reqModel);
-            return Ok();
-        }
 
         [HttpPost("refreshtoken")]
         public async Task<IActionResult> RefreshToken(RefreshTokenRequest reqModel)
