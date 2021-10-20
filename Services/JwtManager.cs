@@ -40,7 +40,7 @@ namespace Suma.Authen.Services
                notBefore: jwtDate,
                expires: jwtDate.AddSeconds(10),
                signingCredentials: signingCredentials
-           );
+            );
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
