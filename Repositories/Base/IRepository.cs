@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver.Linq;
 
@@ -7,7 +8,7 @@ namespace Suma.Authen.Repositories.Base
     {
         IMongoQueryable<TEntity> Collection { get; }
 
-        Task<TEntity> InsertAsync(TEntity entity);
+        Task<TEntity> InsertAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken));
         void Update(TEntity entityToUpdate);
         void DeleteAsync(TEntity entityToDelete);
         void DeleteAsync(object id);

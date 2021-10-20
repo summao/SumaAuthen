@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,12 +21,12 @@ namespace Suma.Authen.Controllers
         }
 
         [HttpPost("signup")]
-        public async Task<IActionResult> SignUp([FromBody] SignUpRequest reqModel)
+        public async Task<IActionResult> SignUp([FromBody] SignUpRequest reqModel, CancellationToken cancellationToken)
         {
-            await _accountService.SignUpAsync(reqModel);
+            await _accountService.SignUpAsync(reqModel, cancellationToken);
             return Ok();
         }
-        
+
         [HttpPost("signin")]
         public async Task<IActionResult> Signin([FromBody] SignInRequest reqModel)
         {

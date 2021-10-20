@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using MongoDB.Driver;
 using System.Linq;
 using MongoDB.Driver.Linq;
+using System.Threading;
 
 namespace Suma.Authen.Repositories.Base
 {
@@ -9,7 +10,8 @@ namespace Suma.Authen.Repositories.Base
     {
         private readonly IMongoCollection<TEntity> _collection;
 
-        public IMongoQueryable<TEntity> Collection { 
+        public IMongoQueryable<TEntity> Collection
+        {
             get { return _collection.AsQueryable(); }
         }
 
@@ -18,9 +20,9 @@ namespace Suma.Authen.Repositories.Base
             _collection = database.GetCollection<TEntity>(typeof(TEntity).Name);
         }
 
-        public async Task<TEntity> InsertAsync(TEntity entity)
+        public async Task<TEntity> InsertAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _collection.InsertOneAsync(entity);
+            await _collection.InsertOneAsync(entity, null, cancellationToken);
             return entity;
         }
 

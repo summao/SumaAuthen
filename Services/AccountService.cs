@@ -7,13 +7,14 @@ using Suma.Authen.Repositories;
 using BC = BCrypt.Net.BCrypt;
 using Suma.Authen.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
 
 namespace Suma.Authen.Services
 {
     public interface IAccountService
     {
         Task<SignInResponse> SignInAsync(SignInRequest req);
-        Task SignUpAsync(SignUpRequest reqModel);
+        Task SignUpAsync(SignUpRequest reqModel, CancellationToken cancellationToken = default(CancellationToken));
         Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest reqModel);
     }
 
@@ -33,7 +34,7 @@ namespace Suma.Authen.Services
             _jwtManager = jwtManager;
         }
 
-        public async Task SignUpAsync(SignUpRequest reqModel)
+        public async Task SignUpAsync(SignUpRequest reqModel, CancellationToken cancellationToken = default(CancellationToken))
         {
             var account = new Account
             {
@@ -44,7 +45,7 @@ namespace Suma.Authen.Services
                 Created = DateTime.UtcNow,
             };
 
-            await _accountRepository.InsertAsync(account);
+            await _accountRepository.InsertAsync(account, cancellationToken);
         }
 
         public async Task<SignInResponse> SignInAsync(SignInRequest reqModel)
