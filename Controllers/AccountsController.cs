@@ -47,7 +47,7 @@ namespace Suma.Authen.Controllers
             var res = await _accountService.RefreshToken(reqModel);
             if (res is null)
             {
-                return Unauthorized("invalid token.");
+                return Unauthorized("invalid refresh token.");
             }
 
             return Ok(res);

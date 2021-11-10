@@ -3,6 +3,8 @@ using MongoDB.Driver;
 using System.Linq;
 using MongoDB.Driver.Linq;
 using System.Threading;
+using System.Linq.Expressions;
+using System;
 
 namespace Suma.Authen.Repositories.Base
 {
@@ -18,6 +20,11 @@ namespace Suma.Authen.Repositories.Base
         public MongoDbBaseRepository(IMongoDatabase database)
         {
             _collection = database.GetCollection<TEntity>(typeof(TEntity).Name);
+        }
+
+        public async Task<TEntity> GetOneAndDeleteAsync(Expression<Func<TEntity, bool>> filter, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _collection.FindOneAndDeleteAsync(filter);
         }
 
         public async Task<TEntity> InsertAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))

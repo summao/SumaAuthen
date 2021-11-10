@@ -50,8 +50,7 @@ namespace Suma.Authen.Services
 
         public async Task<SignInResponse> SignInAsync(SignInRequest reqModel)
         {
-            var account = await _accountRepository.Collection.FirstOrDefaultAsync(x =>
-                x.MobileNumber == reqModel.MobileNumber
+            var account = await _accountRepository.Collection.FirstOrDefaultAsync(x => x.MobileNumber == reqModel.MobileNumber
                 && x.PasswordHash == BC.HashPassword(reqModel.Password)
             );
             if (account == null)
@@ -68,33 +67,20 @@ namespace Suma.Authen.Services
             };
         }
 
-        public async Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest reqModel)
+        public async Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest reqModel,  CancellationToken cancellationToken = default(CancellationToken))
         {
-            // var refreshToken = await _unitOfWork.RefreshTokens.GetOneAsync(a => a.Token == reqModel.RefreshToken && a.UserId == reqModel.UserId && a.Revoked == null);
-            // if (refreshToken is null)
-            // {
-            //     return null;
-            // }
-            // refreshToken.Revoked = DateTime.UtcNow;
+            var isRefreshTokenValid = await _refreshTokenService.IsRefreshTokenValid(reqModel.AccountId, reqModel.RefreshToken, cancellationToken);
+            if (!isRefreshTokenValid)
+            {
+                return null;
+            }
 
-            // var account = await _unitOfWork.Accounts.GetOneAsync(a => a.Id == reqModel.UserId);
-            // var accessToken = _jwtManager.GenerateJwtToken(account);
-            // var newRefreshToken = new RefreshToken 
-            // {
-            //     Token = _jwtManager.RandomTokenString(),
-            //     UserId = account.Id,
-            // }; 
-
-            // await _unitOfWork.RefreshTokens.InsertAsync(newRefreshToken);    
-            // _unitOfWork.RefreshTokens.Update(refreshToken);
-            // await _unitOfWork.CommitAsync();
-
-            //  return new RefreshTokenResponse
-            // {
-            //     AccessToken = accessToken,
-            //     RefreshToken = newRefreshToken.Token
-            // };
-            throw new NotImplementedException();
+            var account = await _accountRepository.Collection.FirstOrDefaultAsync(a => a.Id == reqModel.AccountId, cancellationToken);
+            return new RefreshTokenResponse
+            {
+                AccessToken = _jwtManager.GenerateAccessToken(account),
+                RefreshToken = (await _refreshTokenService.Create(account.Id, cancellationToken)).Token,
+            };
         }
     }
 }
