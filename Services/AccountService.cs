@@ -50,7 +50,7 @@ namespace Suma.Authen.Services
 
         public async Task<SignInResponse> SignInAsync(SignInRequest reqModel)
         {
-            var account = await _accountRepository.Collection.FirstOrDefaultAsync(x => x.MobileNumber == reqModel.MobileNumber
+            var account = await _accountRepository.GetOneAsync(x => x.MobileNumber == reqModel.MobileNumber
                 && x.PasswordHash == BC.HashPassword(reqModel.Password)
             );
             if (account == null)
@@ -75,7 +75,7 @@ namespace Suma.Authen.Services
                 return null;
             }
 
-            var account = await _accountRepository.Collection.FirstOrDefaultAsync(a => a.Id == reqModel.AccountId, cancellationToken);
+            var account = await _accountRepository.GetOneAsync(a => a.Id == reqModel.AccountId, cancellationToken);
             return new RefreshTokenResponse
             {
                 AccessToken = _jwtManager.GenerateAccessToken(account),

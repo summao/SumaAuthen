@@ -22,6 +22,11 @@ namespace Suma.Authen.Repositories.Base
             _collection = database.GetCollection<TEntity>(typeof(TEntity).Name);
         }
 
+        public async Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> filter, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _collection.Find(filter).FirstOrDefaultAsync();
+        }
+
         public async Task<TEntity> GetOneAndDeleteAsync(Expression<Func<TEntity, bool>> filter, CancellationToken cancellationToken = default(CancellationToken))
         {
             return await _collection.FindOneAndDeleteAsync(filter);
