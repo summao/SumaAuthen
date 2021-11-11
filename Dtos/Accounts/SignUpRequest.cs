@@ -10,11 +10,15 @@ namespace Suma.Authen.Dtos
 
         [Required]
         [MinLength(6)]
-        [MaxLength(20)]
+        [MaxLength(30)]
         public string Password { get; set; }
 
         [Required]
         [MaxLength(100)]
         public string ProfileName { get; set; }
+
+        [Required]
+        [MaxLength(100)]
+        public string Username { get; set; }
     }
 }

@@ -12,26 +12,20 @@ namespace Suma.Authen.Entities
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonRequired]
-        [MaxLength(20)]
         public string MobileNumber { get; set; }
 
-        [BsonRequired]
-        [MaxLength(200)]
         public string PasswordHash { get; set; }
 
-        [BsonRequired]
-        [MaxLength(100)]
         public string ProfileName { get; set; }
+
+        public string Username { get; set; }
 
         public DateTime? Birthdate { get; set; }
 
-        [BsonRequired]
         [JsonConverter(typeof(JsonStringEnumConverter))]
         [BsonRepresentation(BsonType.String)]
         public Role Role { get; set; }
         
-        [BsonRequired]
         public DateTime Created { get; set; }
         
         public DateTime? Updated { get; set; }

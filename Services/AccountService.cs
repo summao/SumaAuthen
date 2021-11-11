@@ -41,6 +41,7 @@ namespace Suma.Authen.Services
                 MobileNumber = reqModel.MobileNumber,
                 PasswordHash = BC.HashPassword(reqModel.Password),
                 ProfileName = reqModel.ProfileName,
+                Username = reqModel.Username,
                 Role = Role.User,
                 Created = DateTime.UtcNow,
             };

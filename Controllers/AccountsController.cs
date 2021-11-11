@@ -40,7 +40,6 @@ namespace Suma.Authen.Controllers
             }
         }
 
-
         [HttpPost("refreshtoken")]
         public async Task<IActionResult> RefreshToken(RefreshTokenRequest reqModel, CancellationToken cancellationToken)
         {
