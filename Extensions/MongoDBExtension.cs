@@ -38,13 +38,7 @@ namespace Suma.Authen.Extensions
                     ),
                     new CreateIndexOptions { Unique = true, })
                 ).Wait();
-                refreshTokenCollection.Indexes.CreateOneAsync(
-                    new CreateIndexModel<RefreshToken>(
-                        new IndexKeysDefinitionBuilder<RefreshToken>()
-                        .Ascending(new StringFieldDefinition<RefreshToken>(nameof(RefreshToken.AccountId))
-                    ),
-                    new CreateIndexOptions { Unique = true, })
-                ).Wait();
+                
                 return database;
             });
         } 

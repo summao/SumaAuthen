@@ -6,14 +6,13 @@ using Suma.Authen.Dtos.Accounts;
 using Suma.Authen.Repositories;
 using BC = BCrypt.Net.BCrypt;
 using Suma.Authen.Exceptions;
-using Microsoft.EntityFrameworkCore;
 using System.Threading;
 
 namespace Suma.Authen.Services
 {
     public interface IAccountService
     {
-        Task<SignInResponse> SignInAsync(SignInRequest req);
+        Task<SignInResponse> SignInAsync(SignInRequest req, CancellationToken cancellationToken = default(CancellationToken));
         Task SignUpAsync(SignUpRequest reqModel, CancellationToken cancellationToken = default(CancellationToken));
         Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest reqModel, CancellationToken cancellationToken = default(CancellationToken));
     }
@@ -49,12 +48,10 @@ namespace Suma.Authen.Services
             await _accountRepository.InsertAsync(account, cancellationToken);
         }
 
-        public async Task<SignInResponse> SignInAsync(SignInRequest reqModel)
+        public async Task<SignInResponse> SignInAsync(SignInRequest reqModel, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var account = await _accountRepository.GetOneAsync(x => x.MobileNumber == reqModel.MobileNumber
-                && x.PasswordHash == BC.HashPassword(reqModel.Password)
-            );
-            if (account == null)
+            var account = await _accountRepository.GetOneAsync(x => x.MobileNumber == reqModel.MobileNumber, cancellationToken);
+            if (account is null || !BC.Verify(reqModel.Password, account.PasswordHash))
             {
                 throw new SignInException("Email or password is incorrect");
             }
@@ -68,7 +65,7 @@ namespace Suma.Authen.Services
             };
         }
 
-        public async Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest reqModel,  CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest reqModel, CancellationToken cancellationToken = default(CancellationToken))
         {
             var isRefreshTokenValid = await _refreshTokenService.IsRefreshTokenValid(reqModel.AccountId, reqModel.RefreshToken, cancellationToken);
             if (!isRefreshTokenValid)

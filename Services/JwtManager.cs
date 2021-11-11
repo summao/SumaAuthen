@@ -25,7 +25,7 @@ namespace Suma.Authen.Services
 
         public string GenerateAccessToken(Account account)
         {
-            using var rsa = RSA.Create();
+            var rsa = RSA.Create();
             rsa.ImportRSAPrivateKey(
                 Convert.FromBase64String(_appSettings.RsaPrivateKey)
                 , out _);
