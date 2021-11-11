@@ -42,9 +42,9 @@ namespace Suma.Authen.Controllers
 
 
         [HttpPost("refreshtoken")]
-        public async Task<IActionResult> RefreshToken(RefreshTokenRequest reqModel)
+        public async Task<IActionResult> RefreshToken(RefreshTokenRequest reqModel, CancellationToken cancellationToken)
         {
-            var res = await _accountService.RefreshToken(reqModel);
+            var res = await _accountService.RefreshToken(reqModel, cancellationToken);
             if (res is null)
             {
                 return Unauthorized("invalid refresh token.");

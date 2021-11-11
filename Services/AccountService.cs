@@ -15,7 +15,7 @@ namespace Suma.Authen.Services
     {
         Task<SignInResponse> SignInAsync(SignInRequest req);
         Task SignUpAsync(SignUpRequest reqModel, CancellationToken cancellationToken = default(CancellationToken));
-        Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest reqModel);
+        Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest reqModel, CancellationToken cancellationToken = default(CancellationToken));
     }
 
     public class AccountService : IAccountService
