@@ -1,4 +1,14 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0
-COPY bin/Release/net5.0/publish/ App/
-WORKDIR /App
+FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
+WORKDIR /source
+ENV ASPNETCORE_ENVIRONMENT=Development
+
+COPY *.csproj ./
+RUN dotnet restore
+
+COPY . .
+RUN dotnet publish -c Debug -o /app --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine
+WORKDIR /app
+COPY --from=build /app ./
 ENTRYPOINT ["dotnet", "SumaAuthen.dll"]
