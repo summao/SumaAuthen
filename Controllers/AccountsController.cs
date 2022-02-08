@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -57,6 +58,12 @@ namespace Suma.Authen.Controllers
         public string Test()
         {
             return "Test";
+        }
+
+        [HttpGet("live")]
+        public string Live()
+        {
+            return $"Live {DateTime.UtcNow}";
         }
     }
 }
